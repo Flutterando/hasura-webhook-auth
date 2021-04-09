@@ -1,0 +1,23 @@
+name: jwk_verify
+description: A sample command-line application.
+# version: 1.0.0
+# homepage: https://www.example.com
+
+environment:
+  sdk: '>=2.12.0 <3.0.0'
+
+#dependencies:
+#  path: ^1.7.0
+
+dev_dependencies:
+  mocktail: ^0.1.1
+  pedantic: ^1.9.0
+  test: ^1.14.4
+dependencies: 
+  cryptography: ^2.0.1
+  dio: ^4.0.0
+  hasura_connect: ^3.0.0+1
+  jose: ^0.3.0
+  jwk: ^0.1.0
+  shelf: ^1.1.0
+  shelf_router: ^1.0.0
