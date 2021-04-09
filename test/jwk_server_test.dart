@@ -13,7 +13,7 @@ class DioMock extends Mock implements DioForNative {}
 
 void main() {
   test('exec functions auth with 200', () async {
-    final config = service.Config(jwkUrl: 'jwkUrl');
+    final config = service.Config(jwkUrl: 'jwkUrl', audience: ['prod-tutores-pupz']);
     final keyStore = JsonWebKeyStore();
     keyStore.addKey(JsonWebKey.fromJson({
       'e': 'AQAB',
@@ -43,7 +43,7 @@ void main() {
     expect(response.statusCode, 200);
   });
 
-  test('exec functions auth with 403', () async {
+  test('exec functions auth with 401', () async {
     final config = service.Config(jwkUrl: 'jwkUrl');
     final keyStore = JsonWebKeyStore();
 
@@ -53,7 +53,7 @@ void main() {
       keyStore: keyStore,
       config: config,
     );
-    expect(response.statusCode, 403);
+    expect(response.statusCode, 401);
   });
 
   test('parse config', () async {
@@ -62,6 +62,7 @@ void main() {
     {
     "jwk_url": "url",
     "audience": ["aud1", "aud2"],
+    "unauthorized_role": "anonymous",
     "functions": [
         {
             "secret": "domain",
@@ -74,6 +75,7 @@ void main() {
     final config = await service.generateConfig(file);
 
     expect(config.jwkUrl, 'url');
+    expect(config.unauthorizedRole, 'anonymous');
     expect(config.audience, ['aud1', 'aud2']);
     expect(config.functions[0].secret, 'domain');
     expect(config.functions[0].hasuraRole, 'role');

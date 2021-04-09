@@ -1,6 +1,7 @@
 {
     "jwk_url": "https://www.googleapis.com/service_accounts/v1/jwk/securetoken@system.gserviceaccount.com",
     "audience": ["aud1", "aud2"],
+    "unauthorized_role": "anonymous",
     "functions": [
         {
             "secret": "secret-token",

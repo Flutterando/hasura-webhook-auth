@@ -2,14 +2,16 @@ import 'dart:convert';
 
 class Config {
   final String jwkUrl;
+  final String? unauthorizedRole;
   final List<String> audience;
   final List<FunctionsConfig> functions;
 
-  Config({required this.jwkUrl, this.audience = const [], this.functions = const []});
+  Config({required this.jwkUrl, this.unauthorizedRole, this.audience = const [], this.functions = const []});
 
   Map<String, dynamic> toMap() {
     return {
       'jwk_url': jwkUrl,
+      'unauthorized_role': unauthorizedRole,
       'audience': audience,
       'functions': functions.map((x) => x.toMap()).toList(),
     };
@@ -18,6 +20,7 @@ class Config {
   factory Config.fromMap(Map<String, dynamic> map) {
     return Config(
       jwkUrl: map['jwk_url'],
+      unauthorizedRole: map['unauthorized_role'],
       audience: List<String>.from(map['audience']),
       functions: List<FunctionsConfig>.from(map['functions']?.map((x) => FunctionsConfig.fromMap(x))),
     );

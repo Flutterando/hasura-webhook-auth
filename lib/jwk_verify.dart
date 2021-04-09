@@ -33,7 +33,7 @@ Future<JsonWebKeyStore> generateKeyStore(dio.Dio client, String jwk_url) async {
 FutureOr<shelf.Response> execJwtVerify({required String token, required JsonWebKeyStore keyStore, required Config config}) async {
   var jwt = JsonWebToken.unverified(token);
   var verified = await jwt.verify(keyStore);
-  if (verified) {
+  if (verified && config.audience.contains(jwt.claims['aud'])) {
     var custom = Map.of(jwt.claims['https://hasura.io/jwt/claims']);
     custom.removeWhere((key, value) => (key as String).toLowerCase() == 'x-hasura-allowed-roles');
     custom.remove('x-hasura-role');
@@ -49,7 +49,7 @@ FutureOr<shelf.Response> execJwtVerify({required String token, required JsonWebK
 
 FutureOr<shelf.Response> handle({required shelf.Request request, required JsonWebKeyStore keyStore, required Config config}) async {
   try {
-    if (request.headers.containsKey('authorization')) {
+    if (request.headers.containsKey('authorization') && request.headers['authorization']?.trim().split(' ').length == 2) {
       final token = request.headers['authorization']!.split(' ').last;
       return await execJwtVerify(token: token, config: config, keyStore: keyStore);
     } else if (request.headers.containsKey('secret')) {
@@ -62,6 +62,11 @@ FutureOr<shelf.Response> handle({required shelf.Request request, required JsonWe
         custom['x-hasura-user-id'] = result.hasuraId;
       }
       return shelf.Response.ok(jsonEncode(custom));
+    } else if (config.unauthorizedRole != null) {
+      return shelf.Response.ok(jsonEncode({
+        'x-hasura-role': config.unauthorizedRole,
+        'x-hasura-default-role': config.unauthorizedRole,
+      }));
     } else {
       return shelf.Response(401);
     }
