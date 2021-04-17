@@ -1,6 +1,6 @@
 name: jwk_verify
 description: A sample command-line application.
-# version: 1.0.0
+version: 0.0.4
 # homepage: https://www.example.com
 
 environment:
@@ -16,8 +16,10 @@ dev_dependencies:
 dependencies: 
   cryptography: ^2.0.1
   dio: ^4.0.0
-  hasura_connect: ^3.0.0+1
   jose: ^0.3.0
   jwk: ^0.1.0
   shelf: ^1.1.0
   shelf_router: ^1.0.0
+
+scripts:
+  build: bash ./buildAndPush.sh

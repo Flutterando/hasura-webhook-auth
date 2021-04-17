@@ -11,8 +11,8 @@ class Config {
   Map<String, dynamic> toMap() {
     return {
       'jwk_url': jwkUrl,
-      'unauthorized_role': unauthorizedRole,
       'audience': audience,
+      'unauthorized_role': unauthorizedRole,
       'functions': functions.map((x) => x.toMap()).toList(),
     };
   }

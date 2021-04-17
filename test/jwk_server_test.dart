@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/native_imp.dart';
@@ -67,6 +68,7 @@ void main() {
         {
             "secret": "domain",
             "hasura_role": "role"
+            "hasura_id": "1"
         }
     ]
 }
@@ -74,12 +76,14 @@ void main() {
 
     final config = await service.generateConfig(file);
 
+    expect(config.toJson(), jsonEncode(jsonDecode(await file.readAsString())));
+
     expect(config.jwkUrl, 'url');
     expect(config.unauthorizedRole, 'anonymous');
     expect(config.audience, ['aud1', 'aud2']);
     expect(config.functions[0].secret, 'domain');
     expect(config.functions[0].hasuraRole, 'role');
-    //   expect(config.functions[0].hasuraId, '1');
+    expect(config.functions[0].hasuraId, '1');
   });
   test('get keystore', () async {
     final config = service.Config(jwkUrl: 'jwkUrl');
