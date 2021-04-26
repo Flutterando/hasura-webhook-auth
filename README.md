@@ -20,5 +20,5 @@
 ### Run
 
 ```
-docker run -v ./ConfigFile.josn:/app/ConfigFile.json -p 4000:4000 jacobmoura7/hasura-webhook-auth:0.0.3
+docker run -v ./ConfigFile.json:/app/ConfigFile.json -p 4000:4000 jacobmoura7/hasura-webhook-auth:0.0.3
 ```
